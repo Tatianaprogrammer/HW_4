@@ -1,0 +1,36 @@
+import numpy as np
+import pandas as pd
+data = pd.read_csv('https://raw.githubusercontent.com/nicepeopleproject/ml_linear_regression/master/data/data.csv')
+
+make_and_value = dict()
+makeCarsfr2kto3k = dict()
+
+for element in data.Make.unique():
+    t = [element,[]]
+    make_and_value.update([t])
+    t = [element,0]
+    makeCarsfr2kto3k.update([t])
+    t.clear()
+
+
+
+allPrices = list(data.MSRP)
+CarMakers = list(data.Make)
+
+for i in range(len(CarMakers)):
+    make_and_value[CarMakers[i]].append(allPrices[i])
+    if allPrices[i] > 2000 and allPrices[i] < 3000:
+        makeCarsfr2kto3k[CarMakers[i]] += 1
+maxPrice = 0
+expensiveMaker = ''
+maxAmountofCars = 0
+cheapestMaker = ''
+for key in list(make_and_value.keys()):
+    if (sum(make_and_value[key])/len(make_and_value[key])) > maxPrice:
+        maxPrice = sum(make_and_value[key])/len(make_and_value[key])
+        expensiveMaker = key
+    if makeCarsfr2kto3k[key] > maxAmountofCars:
+        maxAmountofCars = makeCarsfr2kto3k[key]
+        cheapestMaker = key
+print(expensiveMaker, ' - в среднем стоят дороже(' + str(int(maxPrice)) + ')')
+print(cheapestMaker, ' - больше всего машин этой марки стоят от 2 до 3 тысяч(' + str(maxAmountofCars) + ')')
